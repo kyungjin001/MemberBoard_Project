@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        img {
+            width: 150px;
+            height: 100px;
+        }
+
+
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script>
+        const detail = (boardId) => {
+            console.log(boardId);
+            const reqUrl = "/board/" + boardId;
+            $.ajax({
+                type:'post',
+                url: reqUrl,
+                dataType: "json",
+                success: function (result){
+                    console.log(result);
+                    let output = "";
+                    output += "<table>\n" +
+                        "    <thead>\n" +
+                        "        <tr>\n" +
+                        "            <th>번호</th>\n" +
+                        "            <th>제목</th>\n" +
+                        "            <th>작성자</th>\n" +
+                        "            <th>내용</th>\n" +
+                        "            <th>조회수</th>\n" +
+                        "            <th>첨부파일명</th>\n" +
+                        "            <th>작성일자</th>\n" +
+                        "        </tr>\n" +
+                        "    </thead>\n" +
+                        "    <tbody>\n" +
+                        "        <tr>\n" +
+                        "            <td>" + result.boardId+ "</td>\n" +
+                        "            <td>" + result.boardTitle + "</td>\n" +
+                        "            <td>" + result.boardWriter + "</td>\n" +
+                        "            <td>" + result.boardContents + "</td>\n" +
+                        "            <td>" + result.boardImageName + "</td>\n" +
+                        "            <td>" + result.boardTime+ "</td>\n" +
+                        "        </tr>\n" +
+                        "    </tbody>\n" +
+                        "</table>";
+                    document.getElementById('board-detail').innerHTML = output;
+                } ,
+                error: function (){
+                    alert('ajax 실패');
+                }
+            });
+
+        }
+    </script>
+
+
+
+    <script>
+        function deleteById(boardId){
+            const reqUrl = "/board/"+boardId;
+
+            $.ajax({
+                type: 'delete',
+                url: reqUrl,
+                success: function (result){
+                    location.href='/board/';
+                },
+                error:function (){
+                    alert("실패!")
+                }
+            });
+        }
+
+    </script>
+
+
+
+</head>
+<body>
+<table>
+    <thead>
+    <tr>
+        <td>번호</td>
+        <td>제목</td>
+        <td>작성자</td>
+        <td>내용</td>
+        <td>조회수</td>
+        <td>첨부파일명</td>
+        <td>작성시간</td>
+        <td>삭제(get)</td>
+        <td>삭제(ajax)</td>
+        <td>조회(ajax)</td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="board: ${boardList}">
+        <td th:text="${board.boardId}"></td>
+        <td> <a th:href="@{|/board/${board.boardId}|}" th:text="${board.boardTitle}"></a></td>
+        <td th:text="${board.boardWriter}"></td>
+        <td th:text="${board.boardContents}"></td>
+        <td><img th:src="@{/upload/} + ${board.boardImageName}"> </td>
+        <td th:text="${board.boardTime}"></td>
+        <td><a th:href="@{|/board/delete/${board.boardId}|}">삭제(get)</a></td>
+        <td><button th:onclick="deleteById([[${board.boardId}]])">삭제(ajax)</button></td>
+        <td><button th:onclick="detail([[${board.boardId}]])">조회(ajax)</button></td>
+    </tr>
+    </tbody>
+
+</table>
+<div id="board-detail"></div>
+
+</body>
+</html>

@@ -1,0 +1,26 @@
+server:
+  port: 8098
+
+
+# DB 접속 정보
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/springboot_MemberBoard?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: memberboard
+    password: 1234
+  thymeleaf:
+    cache: false
+
+  # JPA 관련 설정
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+# mybatis 관련 설정
+mybatis:
+  # resources/mapper/ 에 있는 모든 xml 파일
+  mapper-locations: mapper/*.xml
+  # alias 설정
+  type-aliases-package: com.icia.project.dto

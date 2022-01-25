@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+
+
+    <style>
+        img {
+            width: 150px;
+            height: 100px;
+        }
+
+
+    </style>
+
+    <script>
+        function deleteById(boardId){
+            const reqUrl = "/board/" + boardId;
+
+            $.ajax({
+                type: 'delete',
+                url: reqUrl,
+                success: function (){
+                    // 삭제 성공하면 회원목록 페이지를 다시 요청하도록
+                    location.href='/board';
+                },
+                error:function (){
+                    alert('ajax 실패');
+                }
+
+            });
+        }
+
+    </script>
+
+    <script>
+        function deleteById2(commentId){
+            const reqUrl = "/comment/" + commentId;
+
+            $.ajax({
+                type: 'delete',
+                url: reqUrl,
+                success: function (){
+                    location.reload(); // reload는 새로고침
+
+                },
+                error:function (){
+                    alert('ajax 실패');
+                }
+
+            });
+        }
+
+    </script>
+
+
+
+</head>
+<body>
+    <h2>findById</h2>
+<table>
+
+    <thead>
+    <tr>
+        <th>번호</th>
+        <th>제목</th>
+        <th>작성자</th>
+        <th>내용</th>
+        <th>첨부파일명</th>
+        <th>작성일자</th>
+        <th>수정</th>
+        <th>삭제</th>
+        <th th:if="${#strings.equals(session['loginEmail'], 'admin')}">삭제(관리자용)</th>
+
+
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td th:text="${board.boardId}"></td>
+        <td th:text="${board.boardTitle}"></td>
+        <td th:text="${board.boardWriter}"></td>
+        <td th:text="${board.boardContents}"></td>
+        <td><img th:src="@{/upload/} + ${board.boardImageName}"> </td>
+        <td th:text="${board.boardTime}"></td>
+        <td><a th:if="${board.boardWriter.equals(session['loginEmail'])}"  th:href="@{|/board/update/${board.boardId}|}">수정</a></td>
+        <td><button th:if="${board.boardWriter.equals(session['loginEmail'])}" th:onclick="deleteById([[${board.boardId}]])">삭제</button></td>
+        <td><button th:if="${#strings.equals(session['loginEmail'], 'admin')}" th:onclick="deleteById([[${board.boardId}]])">삭제</button></td>
+
+
+    </tr>
+    </tbody>
+</table>
+
+<!---->
+<div id="comment-write">
+    <input type="text" id="commentWriter" placeholder="작성자" th:value="${session['loginEmail']}"><br>
+    <input type="text" id="commentContents" placeholder="내용"><br>
+    <button id="comment-write-btn">댓글등록</button>
+</div>
+
+
+
+    <div id="comment-area">
+        <table>
+            <thead>
+                <tr>
+                    <th>댓글번호</th>
+                    <th>게시글번호</th>
+                    <th>작성자</th>
+                    <th>내용</th>
+                    <th>작성시간</th>
+                    <th>삭제</th>
+                    <th th:if="${#strings.equals(session['loginEmail'], 'admin')}">삭제(관리자용)</th>
+                </tr>
+            </thead>
+            <tbody>
+            <tr th:each="comment: ${commentList}">
+                <td th:text="${comment.commentId}"></td>
+                <td th:text="${comment.boardId}"></td>
+                <td th:text="${comment.commentWriter}"></td>
+                <td th:text="${comment.commentContents}"></td>
+                <td th:text="${comment.commentTime}"></td>
+                <td><button th:if="${comment.commentWriter.equals(session['loginEmail'])}" th:onclick="deleteById2([[${comment.commentId}]])">삭제</button></td>
+                <td><button th:if="${#strings.equals(session['loginEmail'], 'admin')}" th:onclick="deleteById2([[${comment.commentId}]])">삭제</button></td>
+
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+
+</body>
+<script>
+    $("#comment-write-btn").click(function (){
+        console.log('댓글등록 버튼 클릭');
+        const commentWriter = $("#commentWriter").val();
+        const commentContents = $("#commentContents").val();
+        const boardId = '[[${board.boardId}]]';
+        $.ajax({
+            type: 'post',
+            url: '/comment/save',
+            data: {
+                'commentWriter': commentWriter,
+                'commentContents': commentContents,
+                'boardId': boardId
+            },
+            dataType: 'json',
+            success: function (result) {
+                console.log(result);
+            },
+            error: function () {
+                alert('ajax 실패');
+            }
+        });
+    });
+</script>
+</html>

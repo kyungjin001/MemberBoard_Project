@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>전체목록</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <style>
+        img {
+            width: 150px;
+            height: 100px;
+        }
+
+
+    </style>
+
+<!--    <script>-->
+<!--        function detail(memberId){-->
+<!--            console.log(memberId);-->
+<!--            const reqUrl = "/member/" + memberId;-->
+<!--            $.ajax({-->
+<!--                type:'post',-->
+<!--                url:reqUrl,-->
+<!--                data: "formData",-->
+<!--                dataType: "json",-->
+<!--                success: function (result){-->
+<!--                    console.log(result);-->
+<!--                    let output = "";-->
+<!--                    output += "<table>\n" +-->
+<!--                        "    <thead>\n" +-->
+<!--                        "        <tr>\n" +-->
+<!--                        "            <th>번호</th>\n" +-->
+<!--                        "            <th>이메일</th>\n" +-->
+<!--                        "            <th>비밀번호</th>\n" +-->
+<!--                        "            <th>이름</th>\n" +-->
+<!--                        "            <th>전화번호</th>\n" +-->
+<!--                        "            <th>사진</th>\n" +-->
+<!--                        "        </tr>\n" +-->
+<!--                        "    </thead>\n" +-->
+<!--                        "    <tbody>\n" +-->
+<!--                        "        <tr>\n" +-->
+<!--                        "            <td>" + result.memberId + "</td>\n" +-->
+<!--                        "            <td>" + result.memberEmail + "</td>\n" +-->
+<!--                        "            <td>" + result.memberPassword + "</td>\n" +-->
+<!--                        "            <td>" + result.memberName + "</td>\n" +-->
+<!--                        "            <td>" + result.memberPhone + "</td>\n" +-->
+<!--                        "            <td>" + result.memberImageName + "</td>\n" +-->
+
+<!--                        "        </tr>\n" +-->
+<!--                        "    </tbody>\n" +-->
+<!--                        "</table>";-->
+<!--                    document.getElementById("detail-view").innerHTML = output;-->
+<!--                } ,-->
+<!--                error: function (){-->
+<!--                    alert('ajax 실패');-->
+<!--                }-->
+<!--            });-->
+<!--        }-->
+<!--    </script>-->
+<!--    <script>-->
+<!--        function deleteById(memberId){-->
+<!--            const reqUrl = "/member/" + memberId;-->
+
+<!--            $.ajax({-->
+<!--                type: 'delete',-->
+<!--                url: reqUrl,-->
+<!--                success: function (){-->
+<!--                    // 삭제 성공하면 회원목록 페이지를 다시 요청하도록-->
+<!--                    location.href='/member/';-->
+<!--                },-->
+<!--                error:function (){-->
+<!--                    alert('ajax 실패');-->
+<!--                }-->
+
+<!--            });-->
+<!--        }-->
+
+<!--    </script>-->
+
+
+
+
+
+</head>
+<body>
+<table>
+    <thead>
+    <tr>
+        <th>번호</th>
+        <th>이메일</th>
+        <th>비밀번호</th>
+        <th>이름</th>
+        <th>번호</th>
+        <th>사진</th>
+        <th>조회</th>
+        <th>조회(ajax)</th>
+        <th>삭제(get)</th>
+        <th>삭제(ajax)</th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr th:each="member: ${memberList}">
+            <td th:text="${member.memberId}"></td>
+            <td th:text="${member.memberEmail}"></td>
+            <td th:text="${member.memberPassword}"></td>
+            <td th:text="${member.memberName}"></td>
+            <td th:text="${member.memberPhone}"></td>
+            <td><img th:src="@{/upload/} + ${member.memberImageName}"> </td>
+            <td><a th:href="@{|/member/${member.memberId}|}">조회</a></td>
+            <td><button th:onclick="detail([[${member.memberId}]])">조회(ajax)</button></td>
+            <td><a th:href="@{|/member/delete/${member.memberId}|}">삭제(get)</a></td>
+            <td>
+                <button th:onclick="deleteById([[${member.memberId}]])">삭제(ajax)</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<div id="detail-view"></div>
+</body>
+</html>

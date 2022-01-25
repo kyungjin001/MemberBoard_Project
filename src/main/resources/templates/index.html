@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+
+
+    <script>
+        function logout() {
+            location.href = "/member/logout";
+        }
+    </script>
+</head>
+<body>
+        <h2>회원제 게시판 시작!</h2>
+
+
+    <a href="/member/save">회원가입은 여기서</a><br>
+    <a href="/member/login">로그인은 여기서</a><br>
+    <a href="/board/save">글쓰기는 여기서</a><br>
+        <button onclick="logout()">로그아웃</button>
+<!--        <div th:if="${member.memberEmail.toString().equals('admin')}">-->
+           <div th:if="${#strings.equals(session['loginEmail'], 'admin')}" >
+
+            <a href="/board">글목록</a><br>
+            <a href="/member/">회원목록</a><br>
+        </div>
+
+        </div>
+
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>회원가입을 하자</title>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+
+    <script>
+    function idDuplicate(){
+    const id=document.getElementById("memberEmail").value;
+    console.log(id);
+    const checkResult=document.getElementById("id-dup-check");
+
+    $.ajax({
+    type:'post', // 전송방식(get,post,delete, put)
+    url: 'idDuplicate', // 요청주소(컨트롤러를 요청하는 주소)
+    data : {'memberEmail':id}, //전송할 데이터
+    dataType : 'text', // 요청 후 리턴받을 때의 데이터 형식
+    success : function(result){ //요청이 성공적으로 처리됐을때 실행할 함수
+    console.log('ajax성공')
+    console.log(result)
+
+    if(result=="ok"){
+    checkResult.style.color = 'green';
+    checkResult.innerHTML='멋진아이디네요!!';
+    }
+    else{
+    checkResult.style.color = 'red';
+    checkResult.innerHTML='이미 사용중인 아이디입니다.';
+    }
+
+    },
+    error : function(){
+    console.log('ajax실패');
+    }
+    });
+
+    }
+
+    </script>
+
+
+
+
+
+
+
+
+</head>
+<body>
+
+    <form action="/member/save" method="post" enctype="multipart/form-data">
+        <input type="text" name="memberEmail" placeholder="이메일 입력" id="memberEmail" onblur="idDuplicate()"><br>
+        <br><span id="id-dup-check"></span>
+        <input type="text" name="memberPassword" placeholder="비밀번호 입력"><br>
+        <input type="text" name="memberName" placeholder="이름 입력"><br>
+        <input type="text" name="memberPhone" placeholder="전화번호 입력"><br>
+        <input type="file" name="memberImage"><br>
+        <input type="submit" value="회원가입">
+    </form>
+
+
+
+
+</body>
+</html>

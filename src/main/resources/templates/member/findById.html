@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        img {
+            width: 150px;
+            height: 100px;
+        }
+    </style>
+
+
+
+
+
+
+</head>
+<body>
+
+    <h2>findById</h2>
+<table>
+
+    <thead>
+    <tr>
+        <th>번호</th>
+        <th>이메일</th>
+        <th>비밀번호</th>
+        <th>이름</th>
+        <th>전화번호</th>
+        <th>사진</th>
+
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td th:text="${member.memberId}"></td>
+        <td th:text="${member.memberEmail}"></td>
+        <td th:text="${member.memberPassword}"></td>
+        <td th:text="${member.memberName}"></td>
+        <td th:text="${member.memberPhone}"></td>
+        <td><img th:src="@{/upload/} + ${member.memberImageName}"> </td>
+
+
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

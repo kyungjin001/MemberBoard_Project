@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>글쓰기를 하자</title>
+
+
+
+</head>
+<body>
+
+    <form action="/board/save" method="post" enctype="multipart/form-data">
+        <input type="text" name="boardTitle" placeholder="주제 입력" ><br>
+        <input type="text" name="boardWriter" th:value="${session['loginEmail']}"><br>
+        <input type="text" name="boardContents" placeholder="이름 입력"><br>
+        <input type="file" name="boardImage"><br>
+        <input type="submit" value="글쓰기">
+    </form>
+
+
+
+
+</body>
+</html>
